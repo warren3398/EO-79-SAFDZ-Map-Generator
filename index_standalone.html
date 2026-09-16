@@ -80,6 +80,15 @@ background-size:450px 250px,450px 250px,100% 100%;background-attachment:fixed}
   @media (max-width:1100px){.app{grid-template-columns:300px 1fr}.stage{padding:12px}.sidebar{padding:10px}}
   @media (max-width:760px){header.site-header img{height:82px;width:100%;object-fit:cover}.app{grid-template-columns:1fr;min-height:auto}.sidebar{max-height:none;border-right:0;border-bottom:1px solid rgba(255,255,255,.14)}.stage{padding:10px;overflow:auto}.section{border-radius:10px}}
 
+
+/* v30: official SAFDZ RGB colors + equal-width legend columns */
+.legendTable{table-layout:fixed!important;}
+.legendTable th,.legendTable td{box-sizing:border-box;}
+.legendTable th:nth-child(1),.legendTable td:nth-child(1),
+.legendTable th:nth-child(2),.legendTable td:nth-child(2),
+.legendTable th:nth-child(3),.legendTable td:nth-child(3),
+.legendTable th:nth-child(4),.legendTable td:nth-child(4){width:25%!important;}
+.legendTable .sym,.legendTable .desc,.legendTable .ha,.legendTable .pct{width:25%!important;}
 </style>
 <style>
 /* SAFDZ official-template visual alignment v5 */
@@ -221,6 +230,38 @@ header.site-header.text-agency-header{background:linear-gradient(105deg,#075a3e 
 @media(max-width:1100px){.header-eo-main{font-size:23px!important}.header-eo-sub{font-size:15px!important}}
 @media(max-width:760px){.header-eo-main{font-size:20px!important;text-align:center!important}.header-eo-sub{font-size:13px!important;text-align:center!important}}
 </style>
+
+<style id="v29-landscape-bottom-fit">
+/* v29: keep the complete SAFDZ legend inside the landscape A4 layout */
+#printLayout:not(.portrait) .rightcol{gap:6px;overflow:hidden;}
+#printLayout:not(.portrait) .agency{padding:6px 8px;}
+#printLayout:not(.portrait) .agency-head{grid-template-columns:62px 1fr 54px;gap:5px;}
+#printLayout:not(.portrait) .agency-logo{max-height:60px;}
+#printLayout:not(.portrait) .bagong-logo{max-height:54px;}
+#printLayout:not(.portrait) .agency .rep{font-size:7.5px;line-height:1;}
+#printLayout:not(.portrait) .agency .da{font-size:11px;line-height:1;}
+#printLayout:not(.portrait) .agency .bswm{font-size:14px;line-height:1.05;}
+#printLayout:not(.portrait) .agency .banner{margin:5px -8px 4px;padding:6px;font-size:14px;line-height:1.05;}
+#printLayout:not(.portrait) .agency .subtitle{font-size:8.5px;line-height:1.12;min-height:0;}
+#printLayout:not(.portrait) .agency .official-north{width:52px;height:44px;margin-top:0;}
+#printLayout:not(.portrait) .agency .official-north img{width:42px;height:42px;}
+#printLayout:not(.portrait) .agency .official-scale{font-size:7.5px;}
+#printLayout:not(.portrait) .scale-bar-wrap{width:92px;}
+#printLayout:not(.portrait) .boxtitle{padding:5px 9px;font-size:12px;line-height:1;}
+#printLayout:not(.portrait) .conventional-box{min-height:138px;}
+#printLayout:not(.portrait) .conv-grid{gap:6px;padding:5px 7px;font-size:8px;}
+#printLayout:not(.portrait) .conv-head{font-size:8.5px;margin-bottom:3px;}
+#printLayout:not(.portrait) .road-block img,#printLayout:not(.portrait) .boundary-block img{height:64px;}
+#printLayout:not(.portrait) .road-labels,#printLayout:not(.portrait) .boundary-labels{height:64px;}
+#printLayout:not(.portrait) .hydro-row{margin-bottom:4px!important;}
+#printLayout:not(.portrait) .place-row{margin:2px 0;}
+#printLayout:not(.portrait) .rightcol>.box:nth-child(3){min-height:0;overflow:hidden;}
+#printLayout:not(.portrait) .legendTable{font-size:8.35px;line-height:1.0;table-layout:fixed;}
+#printLayout:not(.portrait) .legendTable th,#printLayout:not(.portrait) .legendTable td{padding:2px 4px;}
+#printLayout:not(.portrait) .legendTable .sym{width:62px;}
+#printLayout:not(.portrait) .legendTable .ha,#printLayout:not(.portrait) .legendTable .pct{width:50px;}
+#printLayout:not(.portrait) .footer-note{font-size:7.5px;padding:3px 6px;}
+</style>
 </head>
 <body>
 <header class="site-header text-agency-header">
@@ -328,18 +369,18 @@ header.site-header.text-agency-header{background:linear-gradient(105deg,#075a3e 
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script>
 const classInfo={
- '1':{name:'Strategic Crop Sub-Development Zone',color:'#3be67f'},
- '2':{name:'Strategic Livestock Sub-Development Zone',color:'#7b3907'},
- '3':{name:'Strategic Fishery Sub-Development Zone',color:'#4f4cff'},
- '4':{name:'Strategic Integrated Crop/Livestock Sub-Development Zone',color:'#47df4b'},
- '5':{name:'Strategic Integrated Crop/Fishery Sub-Development Zone',color:'#48a34d'},
- '6':{name:'Strategic Integrated Crop/Livestock/Fishery Sub-Development Zone',color:'#f2bfc5'},
- '7':{name:'Strategic Integrated Fishery and Livestock Sub-Development Zone',color:'#cfc14a'},
- '8':{name:'Remaining NPAAAD',color:'#f6f161'},
- '9':{name:'Agro-Forestry Zone',color:'#fbba53'},
+ '1':{name:'Strategic Crop Sub-Development Zone',color:'#c0febf'},
+ '2':{name:'Strategic Livestock Sub-Development Zone',color:'#b67e80'},
+ '3':{name:'Strategic Fishery Sub-Development Zone',color:'#4d4dff'},
+ '4':{name:'Strategic Integrated Crop/Livestock Sub-Development Zone',color:'#4ee64d'},
+ '5':{name:'Strategic Integrated Crop/Fishery Sub-Development Zone',color:'#4da74d'},
+ '6':{name:'Strategic Integrated Crop/Livestock/Fishery Sub-Development Zone',color:'#fed4d4'},
+ '7':{name:'Strategic Integrated Fishery and Livestock Sub-Development Zone',color:'#cfc04d'},
+ '8':{name:'Remaining NPAAAD',color:'#fffa5a'},
+ '9':{name:'Agro-Forestry Zone',color:'#fec54d'},
  '10':{name:'Forest/Watershed areas (critical watershed including mangroves)',color:'#a2a4a3'},
- 'BU':{name:'Built-up areas (urban land, airport, roads and bridges)',color:'#b9b9b9'},
- 'Others':{name:'Quarry, mine pit, barren land, rock land, river wash, landfill',color:'#f3f3f3'},
+ 'BU':{name:'Built-up areas (urban land, airport, roads and bridges)',color:'#cccccc'},
+ 'Others':{name:'Quarry, mine pit, barren land, rock land, river wash, beach sand, sand dunes and landfill',color:'#f3f3f3'},
  'WB':{name:'Water Bodies',color:'#57f9ff'}
 };
 const order=['1','2','3','4','5','6','7','8','9','10','BU','Others','WB'];

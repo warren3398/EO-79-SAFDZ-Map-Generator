@@ -50,3 +50,7 @@ Replaced graphic banner with a compact text-based DA-BSWM-ALMED institutional he
 ## v28 final polish
 - Header title completed to “Executive Order No. 79 s. 2012 – No-Go Zone for Mining”.
 - Geographic grid made more visible with darker blue, thicker stroke, higher opacity, and dashed line pattern.
+
+
+## v29 layout fix
+Landscape map layout compacted so the complete SAFDZ legend and parcel-area footer remain inside the page and exported JPEG/PDF.
