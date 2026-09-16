@@ -104,6 +104,12 @@ background-size:450px 250px,450px 250px,100% 100%;background-attachment:fixed}
 .legendTable tbody tr.class-row td{height:24px!important;vertical-align:middle;padding-top:1px!important;padding-bottom:1px!important;}
 #legendTable tbody tr.class-row .desc{overflow:hidden;text-overflow:clip;}
 
+
+/* v32 basic access gate (client-side only; not suitable for confidential data) */
+#accessGate{position:fixed;inset:0;z-index:999999;background:radial-gradient(circle at 50% 15%,#0b3155 0,#071b31 42%,#04101f 100%);display:flex;align-items:center;justify-content:center;padding:20px;font-family:Arial,Helvetica,sans-serif}
+.access-card{width:min(430px,100%);background:rgba(255,255,255,.98);border-radius:18px;padding:30px;box-shadow:0 24px 70px rgba(0,0,0,.45);border-top:5px solid #0b7a53}
+.access-title{font-size:22px;font-weight:900;color:#0b5a3e;text-align:center;margin:0 0 5px}.access-sub{text-align:center;color:#56635d;font-size:13px;margin-bottom:22px}.access-card label{font-size:12px;color:#26362e;margin:10px 0 5px}.access-card input{width:100%;padding:11px 12px;border:1px solid #c7d0cb;border-radius:8px;font-size:14px}.access-card button{width:100%;padding:11px;border-radius:8px;background:#0b6b45;color:#fff;font-weight:800;margin-top:16px}.access-error{min-height:18px;color:#a51e25;text-align:center;font-size:12px;margin-top:10px}.access-note{text-align:center;font-size:10px;color:#7a837f;margin-top:15px}.logout-btn{position:fixed;right:14px;bottom:14px;z-index:99990;width:auto!important;padding:8px 13px!important;margin:0!important;border-radius:20px!important;background:#8b1d24!important;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+
 </style>
 <style>
 /* SAFDZ official-template visual alignment v5 */
@@ -279,6 +285,31 @@ header.site-header.text-agency-header{background:linear-gradient(105deg,#075a3e 
 </style>
 </head>
 <body>
+<div id="accessGate" aria-modal="true" role="dialog">
+  <form class="access-card" id="accessForm">
+    <div class="access-title">EO 79 SAFDZ Map Generator</div>
+    <div class="access-sub">Authorized Access Only</div>
+    <label for="accessUser">Username</label><input id="accessUser" autocomplete="username" required>
+    <label for="accessPass">Password</label><input id="accessPass" type="password" autocomplete="current-password" required>
+    <button type="submit">LOGIN</button>
+    <div class="access-error" id="accessError"></div>
+    <div class="access-note">Access is locked again when the browser session is closed.</div>
+  </form>
+</div>
+<button class="logout-btn" id="logoutBtn" type="button" hidden>Logout</button>
+
+<script>
+(function(){
+  const USER='ALRMS', PASS='ALRMS001', KEY='eo79_access_v33';
+  const gate=document.getElementById('accessGate'), form=document.getElementById('accessForm'), err=document.getElementById('accessError'), logout=document.getElementById('logoutBtn');
+  function unlock(){gate.style.display='none';logout.hidden=false;sessionStorage.setItem(KEY,'1');setTimeout(()=>{try{map&&map.invalidateSize()}catch(e){}},150)}
+  function lock(){sessionStorage.removeItem(KEY);gate.style.display='flex';logout.hidden=true;document.getElementById('accessPass').value='';document.getElementById('accessUser').focus()}
+  if(sessionStorage.getItem(KEY)==='1'){unlock()}else{setTimeout(()=>document.getElementById('accessUser').focus(),50)}
+  form.addEventListener('submit',function(e){e.preventDefault();const u=document.getElementById('accessUser').value.trim();const p=document.getElementById('accessPass').value;if(u===USER&&p===PASS){err.textContent='';unlock()}else{err.textContent='Invalid username or password.';document.getElementById('accessPass').value='';document.getElementById('accessPass').focus()}});
+  logout.addEventListener('click',lock);
+})();
+</script>
+
 <header class="site-header text-agency-header">
   <div class="agency-header-inner">
     <div class="header-eo79"><div><div class="header-eo-main">EXECUTIVE ORDER NO. 79 <span class="eo-year">s. 2012</span></div><div class="header-eo-sub">NO-GO ZONE FOR MINING</div></div></div>

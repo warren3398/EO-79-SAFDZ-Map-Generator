@@ -58,3 +58,10 @@ Landscape map layout compacted so the complete SAFDZ legend and parcel-area foot
 
 ## v31
 Legend class rows use equal heights; the Description column is widened while Mapping Symbol, Ha and % are narrower. Official v30 SAFDZ colors and v29 bottom-fit behavior are retained.
+
+
+## v32 Basic Access Gate
+Default username: `almed`
+Default password: `EO79@2026`
+
+This is a client-side convenience gate for a public GitHub Pages site, not strong security for confidential data. Change the USER/PASS constants in index.html and index_standalone.html before deployment if desired.
