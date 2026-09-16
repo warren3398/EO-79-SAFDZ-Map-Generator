@@ -89,6 +89,21 @@ background-size:450px 250px,450px 250px,100% 100%;background-attachment:fixed}
 .legendTable th:nth-child(3),.legendTable td:nth-child(3),
 .legendTable th:nth-child(4),.legendTable td:nth-child(4){width:25%!important;}
 .legendTable .sym,.legendTable .desc,.legendTable .ha,.legendTable .pct{width:25%!important;}
+
+/* v31: wide description column + equal class row heights */
+.legendTable{table-layout:fixed!important;}
+.legendTable th,.legendTable td{box-sizing:border-box;}
+.legendTable th:nth-child(1),.legendTable td:nth-child(1){width:18%!important;}
+.legendTable th:nth-child(2),.legendTable td:nth-child(2){width:52%!important;}
+.legendTable th:nth-child(3),.legendTable td:nth-child(3){width:15%!important;}
+.legendTable th:nth-child(4),.legendTable td:nth-child(4){width:15%!important;}
+.legendTable .sym{width:18%!important;}
+.legendTable .desc{width:52%!important;white-space:nowrap;font-size:7.35px;line-height:1;}
+.legendTable .ha,.legendTable .pct{width:15%!important;}
+.legendTable tbody tr.class-row{height:24px!important;}
+.legendTable tbody tr.class-row td{height:24px!important;vertical-align:middle;padding-top:1px!important;padding-bottom:1px!important;}
+#legendTable tbody tr.class-row .desc{overflow:hidden;text-overflow:clip;}
+
 </style>
 <style>
 /* SAFDZ official-template visual alignment v5 */
@@ -502,7 +517,7 @@ function populateFields(g){const keys=[...new Set(g.features.flatMap(f=>Object.k
 function redraw(){if(parcelLayer)map.removeLayer(parcelLayer);if(safdzLayer)map.removeLayer(safdzLayer);if(clippedFC){safdzLayer=L.geoJSON(clippedFC,{style:f=>{const c=normalizeClass(f.properties?.[chosenClassField]);return {color:'#303030',weight:.55,fillColor:(classInfo[c]?.color||'#eeeeee'),fillOpacity:.56}},onEachFeature:(f,l)=>{const c=normalizeClass(f.properties?.[chosenClassField]);l.bindTooltip(c,{permanent:true,direction:'center',className:'safdz-label'})}}).addTo(map)}if(parcelFC){parcelLayer=L.geoJSON(parcelFC,{style:{color:'#4cff27',weight:2,fillOpacity:0,dashArray:null}}).addTo(map)}}
 function clipSafdz(){if(!parcelFC||!safdzFC)throw new Error('Load the mining parcel first, then SAFDZ.');const p=dissolveParcel(parcelFC);const out=[];for(const f of safdzFC.features){if(!['Polygon','MultiPolygon'].includes(f.geometry?.type))continue;try{const inter=turf.intersect(turf.featureCollection([f,p]));if(inter&&turf.area(inter)>0){inter.properties={...(f.properties||{})};out.push(repairFeature(inter))}}catch(e){try{const bb=turf.bbox(f),pb=turf.bbox(p);if(!(bb[2]<pb[0]||bb[0]>pb[2]||bb[3]<pb[1]||bb[1]>pb[3])){const rf=repairFeature(f);const inter=turf.intersect(turf.featureCollection([rf,p]));if(inter){inter.properties={...(f.properties||{})};out.push(inter)}}}catch(_){}}}clippedFC={type:'FeatureCollection',features:out};redraw();recompute();return out.length}
 function recompute(){const vals={};let parcelHa=0;try{parcelHa=turf.area(dissolveParcel(parcelFC))/10000}catch(e){};if(clippedFC)for(const f of clippedFC.features){const c=normalizeClass(f.properties?.[chosenClassField]);vals[c]=(vals[c]||0)+turf.area(f)/10000}renderLegend(vals,parcelHa);document.getElementById('parcelAreaNote').textContent=`Parcel area: ${parcelHa?parcelHa.toLocaleString(undefined,{maximumFractionDigits:4}):'—'} ha`;updateCoords()}
-function renderLegend(vals={},parcelHa=0){const body=document.getElementById('legendBody');body.innerHTML='';const add=(html)=>body.insertAdjacentHTML('beforeend',html);for(const c of order){if(c==='8')add('<tr><td colspan="4" class="group">NON-SAFDZ</td></tr>');const a=vals[c]||0,p=parcelHa?a/parcelHa*100:0;add(`<tr><td class="sym" style="background:${classInfo[c].color}">${esc(c)}</td><td class="desc">${esc(classInfo[c].name)}</td><td class="ha">${a?a.toFixed(4):'–'}</td><td class="pct">${a?p.toFixed(2):'–'}</td></tr>`);if(c==='7'){const safTotal=['1','2','3','4','5','6','7'].reduce((s,k)=>s+(vals[k]||0),0);add(`<tr><td colspan="2" class="total">TOTAL SAFDZ (1–7)</td><td class="ha"><b>${safTotal?safTotal.toFixed(4):'–'}</b></td><td class="pct"><b>${parcelHa&&safTotal?(safTotal/parcelHa*100).toFixed(2):'–'}</b></td></tr>`)}}
+function renderLegend(vals={},parcelHa=0){const body=document.getElementById('legendBody');body.innerHTML='';const add=(html)=>body.insertAdjacentHTML('beforeend',html);for(const c of order){if(c==='8')add('<tr><td colspan="4" class="group">NON-SAFDZ</td></tr>');const a=vals[c]||0,p=parcelHa?a/parcelHa*100:0;add(`<tr class="class-row"><td class="sym" style="background:${classInfo[c].color}">${esc(c)}</td><td class="desc">${esc(classInfo[c].name)}</td><td class="ha">${a?a.toFixed(4):'–'}</td><td class="pct">${a?p.toFixed(2):'–'}</td></tr>`);if(c==='7'){const safTotal=['1','2','3','4','5','6','7'].reduce((s,k)=>s+(vals[k]||0),0);add(`<tr><td colspan="2" class="total">TOTAL SAFDZ (1–7)</td><td class="ha"><b>${safTotal?safTotal.toFixed(4):'–'}</b></td><td class="pct"><b>${parcelHa&&safTotal?(safTotal/parcelHa*100).toFixed(2):'–'}</b></td></tr>`)}}
 add(`<tr><td colspan="2" class="total">TOTAL PARCEL</td><td class="ha"><b>${parcelHa?parcelHa.toFixed(4):'–'}</b></td><td class="pct"><b>${parcelHa?'100.00':'–'}</b></td></tr>`)}
 function updateCoords(){const b=map.getBounds(),lngs=[b.getWest()+b.getEast()-b.getWest(),0,0];const xs=[b.getWest()+(b.getEast()-b.getWest())*.25,b.getWest()+(b.getEast()-b.getWest())*.58,b.getWest()+(b.getEast()-b.getWest())*.9];const fmt=v=>`${Math.abs(v).toFixed(4)}°${v>=0?'E':'W'}`;['c1','c2','c3','cb1','cb2','cb3'].forEach((id,i)=>document.getElementById(id).textContent=fmt(xs[i%3]))}
 function fit(){if(parcelFC){map.fitBounds(L.geoJSON(parcelFC).getBounds().pad(.18));setTimeout(()=>{map.invalidateSize();updateCoords()},150)}}

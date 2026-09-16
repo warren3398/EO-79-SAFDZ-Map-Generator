@@ -54,3 +54,7 @@ Replaced graphic banner with a compact text-based DA-BSWM-ALMED institutional he
 
 ## v29 layout fix
 Landscape map layout compacted so the complete SAFDZ legend and parcel-area footer remain inside the page and exported JPEG/PDF.
+
+
+## v31
+Legend class rows use equal heights; the Description column is widened while Mapping Symbol, Ha and % are narrower. Official v30 SAFDZ colors and v29 bottom-fit behavior are retained.
