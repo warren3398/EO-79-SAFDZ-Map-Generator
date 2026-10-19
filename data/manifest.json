@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "provinces": [
+    {
+      "name": "ABRA",
+      "chunks": [
+        "data/abra.part01.bin",
+        "data/abra.part02.bin",
+        "data/abra.part03.bin",
+        "data/abra.part04.bin",
+        "data/abra.part05.bin"
+      ],
+      "compressed_bytes": 28975024,
+      "features": 14263
+    }
+  ]
+}
