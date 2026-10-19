@@ -330,7 +330,7 @@ header.site-header.text-agency-header{background:linear-gradient(105deg,#075a3e 
 
 <div class="section compact" id="sec2"><div class="section-top"><h2>2. Built-in SAFDZ Database</h2><button class="detail-toggle" type="button" data-target="sec2">▼ Details</button></div>
 <div class="quick-upload"><label>SAFDZ coverage</label><select id="builtInProvince"><option value="AUTO">Auto-detect from mining parcel (Abra test)</option><option value="ABRA">Abra</option></select></div>
-<div class="section-details"><small>v34 pilot: Abra is embedded as a compressed web dataset. Other provinces will be added after conversion and hosting. No SAFDZ upload is needed.</small>
+<div class="section-details"><small>v35 pilot: Abra is embedded as a compressed web dataset. Other provinces will be added after conversion and hosting. No SAFDZ upload is needed.</small>
 <div class="row"><div><label>Classification field</label><select id="classField"><option value="SAFDZ">SAFDZ</option></select></div><div><label>Label field (optional)</label><select id="labelField"><option value="">None</option></select></div></div>
 <button id="loadSafdz">Load Built-in SAFDZ / Re-analyze</button><div class="status" id="safdzStatus">Abra built-in dataset ready. Upload a mining parcel to analyze.</div>
 </div></div>
@@ -643,10 +643,21 @@ renderLegend();updateCoords();
 let builtInSafdzCache=null;
 async function fetchBuiltInAbra(){
  if(builtInSafdzCache)return builtInSafdzCache;
- const response=await fetch('data/abra.geojson.gz');
- if(!response.ok)throw new Error('Cannot fetch built-in Abra dataset (HTTP '+response.status+'). Deploy the data/ folder to GitHub Pages.');
- if(!('DecompressionStream' in window))throw new Error('This browser does not support gzip decompression. Use a current Chrome, Edge, or Firefox.');
- const stream=response.body.pipeThrough(new DecompressionStream('gzip'));
+ const parts = ["data/abra.part01.bin", "data/abra.part02.bin", "data/abra.part03.bin", "data/abra.part04.bin", "data/abra.part05.bin"];
+
+ if(!('DecompressionStream' in window))throw new Error('Use an updated Chrome, Edge or Firefox to load the compressed SAFDZ dataset.');
+ const buffers=[];
+ for(let i=0;i<parts.length;i++){
+  status('safdzStatus',`Downloading Abra SAFDZ (${i+1}/${parts.length})…`);
+  let response;
+  try{response=await fetch(parts[i],{cache:'no-store'});}catch(e){throw new Error('Cannot download '+parts[i]+'. Check network and GitHub Pages deployment. '+e.message);}
+  if(!response.ok)throw new Error('Missing SAFDZ data file: '+parts[i]+' (HTTP '+response.status+'). Upload all files in the data folder to GitHub.');
+  buffers.push(new Uint8Array(await response.arrayBuffer()));
+ }
+ const total=buffers.reduce((n,b)=>n+b.byteLength,0);
+ const merged=new Uint8Array(total);let pos=0;
+ for(const b of buffers){merged.set(b,pos);pos+=b.byteLength;}
+ const stream=new Blob([merged]).stream().pipeThrough(new DecompressionStream('gzip'));
  const fc=JSON.parse(await new Response(stream).text());
  builtInSafdzCache=fc;return fc;
 }

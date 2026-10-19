@@ -1,0 +1,1 @@
+EO79 SAFDZ v35 Abra pilot — fixed GitHub browser upload size issue. Upload every file including all data/abra.part*.bin (each <=7 MB) to GitHub repository root, preserving data/ folder. Original compressed 29 MB file is no longer used. Test https://YOURUSER.github.io/YOURREPO/data/abra.part01.bin to confirm deployment. All chunks are required.
