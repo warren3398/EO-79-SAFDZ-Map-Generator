@@ -328,14 +328,11 @@ header.site-header.text-agency-header{background:linear-gradient(105deg,#075a3e 
 <button id="loadParcel">Load + Auto-fix Geometry</button><div class="status" id="parcelStatus">Waiting for parcel map.</div>
 </div></div>
 
-<div class="section compact" id="sec2"><div class="section-top"><h2>2. SAFDZ Philippines</h2><button class="detail-toggle" type="button" data-target="sec2" class="detail-toggle">▼ Details</button></div>
-<div class="quick-upload"><label>Choose SAFDZ file(s)</label><input accept=".zip,.geojson,.json" id="safdzFile" multiple="" type="file"/></div>
-<div class="section-details">
-<label>SAFDZ source CRS</label><select id="safdzCrs"><option value="auto">Auto-detect / use each file .PRJ</option><option value="EPSG:4326">WGS 84 (EPSG:4326)</option><option value="EPSG:3857">Web Mercator (EPSG:3857)</option><option value="EPSG:32650">WGS 84 / UTM zone 50N</option><option value="EPSG:32651">WGS 84 / UTM zone 51N</option><option value="EPSG:32652">WGS 84 / UTM zone 52N</option></select>
-<small>All layers are normalized to WGS 84 (EPSG:4326) before overlay, clipping, and map display.</small>
-<small>Select 2 or more province files together when the mining parcel crosses provincial boundaries. Each source filename is retained internally.</small>
-<div class="row"><div><label>Classification field</label><select id="classField"><option value="">Auto-detect after upload</option></select></div><div><label>Label field (optional)</label><select id="labelField"><option value="">None</option></select></div></div>
-<button id="loadSafdz">Load + Clean + Auto-clip to Parcel</button><div class="status" id="safdzStatus">Waiting for SAFDZ map.</div>
+<div class="section compact" id="sec2"><div class="section-top"><h2>2. Built-in SAFDZ Database</h2><button class="detail-toggle" type="button" data-target="sec2">▼ Details</button></div>
+<div class="quick-upload"><label>SAFDZ coverage</label><select id="builtInProvince"><option value="AUTO">Auto-detect from mining parcel (Abra test)</option><option value="ABRA">Abra</option></select></div>
+<div class="section-details"><small>v34 pilot: Abra is embedded as a compressed web dataset. Other provinces will be added after conversion and hosting. No SAFDZ upload is needed.</small>
+<div class="row"><div><label>Classification field</label><select id="classField"><option value="SAFDZ">SAFDZ</option></select></div><div><label>Label field (optional)</label><select id="labelField"><option value="">None</option></select></div></div>
+<button id="loadSafdz">Load Built-in SAFDZ / Re-analyze</button><div class="status" id="safdzStatus">Abra built-in dataset ready. Upload a mining parcel to analyze.</div>
 </div></div>
 
 <div class="section compact" id="sec3"><div class="section-top"><h2>3. Background / Hillshade</h2><button class="detail-toggle" type="button" data-target="sec3" class="detail-toggle">▼ Details</button></div>
@@ -643,8 +640,40 @@ function clearBackgroundRasters(){uploadedRasterLayers.forEach(l=>map.removeLaye
 function updateBackgroundOpacity(){const o=Math.max(.05,Math.min(1,Number(document.getElementById('backgroundOpacity').value)||1));uploadedRasterLayers.forEach(l=>l.setOpacity?.(o));uploadedVectorLayers.forEach(l=>l.setStyle?.(backgroundVectorStyle()))}
 function updateBackgroundVectorStyle(){uploadedVectorLayers.forEach(l=>l.setStyle?.(backgroundVectorStyle()))}
 renderLegend();updateCoords();
-document.getElementById('loadParcel').onclick=async()=>{try{status('parcelStatus','Reading parcel…');const pf=document.getElementById('parcelFile').files[0]; const pc=document.getElementById('parcelCrs').value; parcelFC=repairFC(await parseFile(pf,pc));const p=dissolveParcel(parcelFC);const ha=turf.area(p)/10000;status('parcelStatus',`Loaded ${parcelFC.features.length} parcel feature(s).\nCRS normalized to WGS 84 (EPSG:4326).\nGeometry cleaned/repaired where possible.\nParcel area: ${ha.toFixed(4)} ha`);redraw();fit();recompute()}catch(e){status('parcelStatus','Error: '+e.message,true)}};
-document.getElementById('loadSafdz').onclick=async()=>{try{const files=[...document.getElementById('safdzFile').files];status('safdzStatus',`Reading ${files.length} SAFDZ province file(s)…`);const parsed=await parseSafdzFiles(files,document.getElementById('safdzCrs').value);safdzFC=parsed.fc;populateFields(safdzFC);chosenClassField=document.getElementById('classField').value;status('safdzStatus',`Loaded ${files.length} province file(s), ${safdzFC.features.length.toLocaleString()} SAFDZ feature(s).\n${parsed.report.join('\n')}\nCRS normalized to WGS 84 (EPSG:4326).\nCleaning complete. Clipping merged SAFDZ to parcel…`);const n=clipSafdz();status('safdzStatus',`Completed across ${files.length} province file(s). ${n.toLocaleString()} clipped SAFDZ polygon(s) inside parcel.\nOfficial SAFDZ colors applied automatically based on class code.\nCombined area table recalculated automatically.`)}catch(e){status('safdzStatus','Error: '+e.message,true)}};
+let builtInSafdzCache=null;
+async function fetchBuiltInAbra(){
+ if(builtInSafdzCache)return builtInSafdzCache;
+ const response=await fetch('data/abra.geojson.gz');
+ if(!response.ok)throw new Error('Cannot fetch built-in Abra dataset (HTTP '+response.status+'). Deploy the data/ folder to GitHub Pages.');
+ if(!('DecompressionStream' in window))throw new Error('This browser does not support gzip decompression. Use a current Chrome, Edge, or Firefox.');
+ const stream=response.body.pipeThrough(new DecompressionStream('gzip'));
+ const fc=JSON.parse(await new Response(stream).text());
+ builtInSafdzCache=fc;return fc;
+}
+function intersectsBBox(a,b){return !(a[2]<b[0]||a[0]>b[2]||a[3]<b[1]||a[1]>b[3]);}
+async function loadBuiltInSafdz(){
+ if(!parcelFC)throw new Error('Upload mining application parcel first.');
+ const pb=turf.bbox(parcelFC), ab=[120.4660545,17.1552563,121.1228029,17.9744870];
+ if(!intersectsBBox(pb,ab))throw new Error('Parcel is outside Abra coverage. v34 pilot includes Abra only; other provinces require data conversion.');
+ status('safdzStatus','Downloading built-in Abra SAFDZ data…');
+ const full=await fetchBuiltInAbra();
+ status('safdzStatus','Selecting nearby Abra SAFDZ polygons and computing intersection…');
+ const selected=full.features.filter(f=>{try{return intersectsBBox(turf.bbox(f),pb)}catch(_){return false}});
+ safdzFC={type:'FeatureCollection',features:selected};populateFields(safdzFC);chosenClassField='SAFDZ';
+ const n=clipSafdz();
+ status('safdzStatus',`Abra built-in SAFDZ loaded automatically. ${selected.length.toLocaleString()} candidate polygon(s); ${n.toLocaleString()} intersect the parcel. Area table updated.`);
+}
+document.getElementById('loadParcel').onclick=async()=>{
+ try{
+  status('parcelStatus','Reading parcel…');const pf=document.getElementById('parcelFile').files[0];
+  parcelFC=repairFC(await parseFile(pf,document.getElementById('parcelCrs').value));
+  const ha=turf.area(dissolveParcel(parcelFC))/10000;
+  status('parcelStatus',`Loaded ${parcelFC.features.length} parcel feature(s). Parcel area: ${ha.toFixed(4)} ha. CRS normalized to WGS 84.`);
+  safdzFC=null;clippedFC=null;redraw();fit();recompute();
+  try{await loadBuiltInSafdz()}catch(e){status('safdzStatus',e.message,true)}
+ }catch(e){status('parcelStatus','Error: '+e.message,true)}
+};
+document.getElementById('loadSafdz').onclick=async()=>{try{await loadBuiltInSafdz()}catch(e){status('safdzStatus','Error: '+e.message,true)}};
 document.getElementById('classField').onchange=e=>{chosenClassField=e.target.value; if(safdzFC&&parcelFC)clipSafdz()};
 document.getElementById('applyText').onclick=()=>{document.getElementById('mapTitle').textContent=document.getElementById('titleInput').value;const p=document.getElementById('permitInput').value||'MINING APPLICATION / PERMIT';const l=document.getElementById('locationInput').value||'LOCATION';document.getElementById('mapSubtitle').innerHTML=esc(p)+'<br>'+esc(l)};
 document.getElementById('orientationSelect').onchange=setOrientation;document.getElementById('fitBtn').onclick=fit;document.getElementById('recomputeBtn').onclick=recompute;document.getElementById('jpgBtn').onclick=saveJpg;document.getElementById('pdfBtn').onclick=savePdf;document.getElementById('baseSelect').onchange=setBase;document.getElementById('hillToggle').onchange=setBase;document.getElementById('loadBackground').onclick=()=>loadBackgroundLayers().catch(e=>status('backgroundStatus','Error: '+e.message,true));document.getElementById('clearBackground').onclick=clearBackgroundRasters;document.getElementById('backgroundOpacity').oninput=updateBackgroundOpacity;document.getElementById('backgroundVectorColor').oninput=updateBackgroundVectorStyle;document.getElementById('backgroundVectorFill').oninput=updateBackgroundVectorStyle;document.getElementById('backgroundVectorLineOpacity').oninput=updateBackgroundVectorStyle;document.getElementById('backgroundVectorWidth').oninput=updateBackgroundVectorStyle;document.getElementById('backgroundVectorDashed').onchange=updateBackgroundVectorStyle;map.on('moveend',updateCoords);
@@ -737,7 +766,7 @@ document.addEventListener('click', function(e){
 
   // Auto-load on file selection.
   const parcelInput=document.getElementById('parcelFile');
-  const safdzInput=document.getElementById('safdzFile');
+  const safdzInput=null;
   const bgInput=document.getElementById('backgroundFile');
 
   if(parcelInput) parcelInput.addEventListener('change',()=>{
@@ -745,7 +774,7 @@ document.addEventListener('click', function(e){
       document.getElementById('loadParcel')?.click();
     }
   });
-  if(safdzInput) safdzInput.addEventListener('change',()=>{
+  if(false && safdzInput) safdzInput.addEventListener('change',()=>{
     if(!(safdzInput.files && safdzInput.files.length)) return;
     if(parcelFC){
       document.getElementById('loadSafdz')?.click();
@@ -764,7 +793,7 @@ document.addEventListener('click', function(e){
   if(originalParcelBtn){
     originalParcelBtn.addEventListener('click',()=>{
       setTimeout(()=>{
-        if(parcelFC && safdzInput?.files?.length && !safdzFC){
+        if(false){
           document.getElementById('loadSafdz')?.click();
         }
       },500);
