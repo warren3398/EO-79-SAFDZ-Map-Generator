@@ -329,10 +329,10 @@ header.site-header.text-agency-header{background:linear-gradient(105deg,#075a3e 
 </div></div>
 
 <div class="section compact" id="sec2"><div class="section-top"><h2>2. Built-in SAFDZ Database</h2><button class="detail-toggle" type="button" data-target="sec2">▼ Details</button></div>
-<div class="quick-upload"><label>SAFDZ coverage</label><select id="builtInProvince"><option value="AUTO">Auto-detect from mining parcel (Abra test)</option><option value="ABRA">Abra</option></select></div>
-<div class="section-details"><small>v35 pilot: Abra is embedded as a compressed web dataset. Other provinces will be added after conversion and hosting. No SAFDZ upload is needed.</small>
+<div class="quick-upload"><label>SAFDZ coverage</label><select id="builtInProvince"><option value="AUTO">Auto-detect from mining parcel (nationwide)</option></select></div>
+<div class="section-details"><small>v36 nationwide: provinces are selected automatically using the parcel bounding box. Upload provincial web_data to the data/ folder. Missing or failed provinces block final analysis.</small>
 <div class="row"><div><label>Classification field</label><select id="classField"><option value="SAFDZ">SAFDZ</option></select></div><div><label>Label field (optional)</label><select id="labelField"><option value="">None</option></select></div></div>
-<button id="loadSafdz">Load Built-in SAFDZ / Re-analyze</button><div class="status" id="safdzStatus">Abra built-in dataset ready. Upload a mining parcel to analyze.</div>
+<button id="loadSafdz">Load Built-in SAFDZ / Re-analyze</button><div class="status" id="safdzStatus">Nationwide index ready to load. Upload a mining parcel to analyze.</div>
 </div></div>
 
 <div class="section compact" id="sec3"><div class="section-top"><h2>3. Background / Hillshade</h2><button class="detail-toggle" type="button" data-target="sec3" class="detail-toggle">▼ Details</button></div>
@@ -640,40 +640,104 @@ function clearBackgroundRasters(){uploadedRasterLayers.forEach(l=>map.removeLaye
 function updateBackgroundOpacity(){const o=Math.max(.05,Math.min(1,Number(document.getElementById('backgroundOpacity').value)||1));uploadedRasterLayers.forEach(l=>l.setOpacity?.(o));uploadedVectorLayers.forEach(l=>l.setStyle?.(backgroundVectorStyle()))}
 function updateBackgroundVectorStyle(){uploadedVectorLayers.forEach(l=>l.setStyle?.(backgroundVectorStyle()))}
 renderLegend();updateCoords();
-let builtInSafdzCache=null;
-async function fetchBuiltInAbra(){
- if(builtInSafdzCache)return builtInSafdzCache;
- const parts = ["data/abra.part01.bin", "data/abra.part02.bin", "data/abra.part03.bin", "data/abra.part04.bin", "data/abra.part05.bin"];
-
- if(!('DecompressionStream' in window))throw new Error('Use an updated Chrome, Edge or Firefox to load the compressed SAFDZ dataset.');
- const buffers=[];
- for(let i=0;i<parts.length;i++){
-  status('safdzStatus',`Downloading Abra SAFDZ (${i+1}/${parts.length})…`);
-  let response;
-  try{response=await fetch(parts[i],{cache:'no-store'});}catch(e){throw new Error('Cannot download '+parts[i]+'. Check network and GitHub Pages deployment. '+e.message);}
-  if(!response.ok)throw new Error('Missing SAFDZ data file: '+parts[i]+' (HTTP '+response.status+'). Upload all files in the data folder to GitHub.');
-  buffers.push(new Uint8Array(await response.arrayBuffer()));
- }
- const total=buffers.reduce((n,b)=>n+b.byteLength,0);
- const merged=new Uint8Array(total);let pos=0;
- for(const b of buffers){merged.set(b,pos);pos+=b.byteLength;}
- const stream=new Blob([merged]).stream().pipeThrough(new DecompressionStream('gzip'));
- const fc=JSON.parse(await new Response(stream).text());
- builtInSafdzCache=fc;return fc;
+// v36 Nationwide SAFDZ loader. All URLs relative to the published GitHub Pages root.
+const NATIONWIDE_DATA_ROOT='data/';
+const unavailableSafdzProvinces=['MOUNTAIN PROVINCE','PANGASINAN','CAVITE','NORTH COTABATO'];
+let nationwideIndexPromise=null;
+const provinceCache=new Map();
+async function fetchJSONStrict(url){
+ let r;
+ try{r=await fetch(url,{cache:'no-store'})}catch(e){throw new Error('Cannot fetch '+url+': '+e.message)}
+ if(!r.ok)throw new Error('Missing data: '+url+' (HTTP '+r.status+')');
+ try{return await r.json()}catch(e){throw new Error('Invalid JSON at '+url+': '+e.message)}
+}
+async function getNationwideIndex(){
+ if(!nationwideIndexPromise)nationwideIndexPromise=fetchJSONStrict(NATIONWIDE_DATA_ROOT+'index.json').catch(e=>{nationwideIndexPromise=null;throw e});
+ return nationwideIndexPromise;
 }
 function intersectsBBox(a,b){return !(a[2]<b[0]||a[0]>b[2]||a[3]<b[1]||a[1]>b[3]);}
+function bboxUnion(bboxes){return [Math.min(...bboxes.map(b=>b[0])),Math.min(...bboxes.map(b=>b[1])),Math.max(...bboxes.map(b=>b[2])),Math.max(...bboxes.map(b=>b[3]))]}
+function getChunkPaths(manifest,prov){
+ // v3 converter may use parts as filenames or objects, or chunks as in the pilot.
+ let chunks=manifest.parts||manifest.chunks||manifest.files;
+ if(!Array.isArray(chunks)&&Array.isArray(manifest.provinces)){
+  const e=manifest.provinces.find(x=>String(x.name||x.province).toUpperCase()===prov.province)||manifest.provinces[0];
+  chunks=e?.parts||e?.chunks||e?.files;
+ }
+ if(!Array.isArray(chunks)||!chunks.length)throw new Error('No data parts in '+prov.path+'. Check converter manifest schema.');
+ const manifestDir=prov.path.substring(0,prov.path.lastIndexOf('/')+1);
+ return chunks.map(c=>{
+  const value=typeof c==='string'?c:(c.path||c.file||c.filename||c.name||c.url);
+  if(typeof value!=='string'||!value)throw new Error('Unsupported part entry in '+prov.path);
+  if(/^https?:\/\//i.test(value))return value;
+  if(value.startsWith('/'))throw new Error('Absolute data path not supported: '+value);
+  if(value.startsWith('data/'))return value;
+  if(value.startsWith(manifestDir))return NATIONWIDE_DATA_ROOT+value;
+  return NATIONWIDE_DATA_ROOT+manifestDir+value;
+ });
+}
+async function loadProvinceData(prov){
+ if(provinceCache.has(prov.province))return provinceCache.get(prov.province);
+ const work=(async()=>{
+  const manifest=await fetchJSONStrict(NATIONWIDE_DATA_ROOT+prov.path);
+  const parts=getChunkPaths(manifest,prov);
+  if(!('DecompressionStream' in window))throw new Error('Updated Chrome, Edge or Firefox is required for gzip data.');
+  const buffers=[];
+  for(let i=0;i<parts.length;i++){
+   status('safdzStatus',`Loading ${prov.province}: part ${i+1}/${parts.length}…`);
+   let r;
+   try{r=await fetch(parts[i])}catch(e){throw new Error('Cannot fetch '+parts[i]+': '+e.message)}
+   if(!r.ok)throw new Error('Missing SAFDZ data part '+parts[i]+' (HTTP '+r.status+')');
+   buffers.push(new Uint8Array(await r.arrayBuffer()));
+  }
+  const merged=new Uint8Array(buffers.reduce((n,b)=>n+b.length,0));let offset=0;
+  for(const b of buffers){merged.set(b,offset);offset+=b.length}
+  let fc;
+  try{
+   const stream=new Blob([merged]).stream().pipeThrough(new DecompressionStream('gzip'));
+   fc=JSON.parse(await new Response(stream).text());
+  }catch(e){throw new Error('Cannot decompress '+prov.province+' SAFDZ: '+e.message)}
+  if(fc.type!=='FeatureCollection'||!Array.isArray(fc.features))throw new Error('Invalid GeoJSON FeatureCollection for '+prov.province);
+  return fc;
+ })();
+ provinceCache.set(prov.province,work);
+ try{return await work}catch(e){provinceCache.delete(prov.province);throw e}
+}
+async function populateNationwideOptions(){
+ try{
+  const index=await getNationwideIndex();
+  const sel=document.getElementById('builtInProvince');
+  for(const p of index.provinces){
+   const o=document.createElement('option');o.value=p.province;o.textContent=p.province;sel.appendChild(o);
+  }
+  status('safdzStatus',`${index.provinces.length} converted provincial datasets indexed. Upload parcel to analyze.`);
+ }catch(e){status('safdzStatus','Nationwide index not available: '+e.message,true)}
+}
 async function loadBuiltInSafdz(){
  if(!parcelFC)throw new Error('Upload mining application parcel first.');
- const pb=turf.bbox(parcelFC), ab=[120.4660545,17.1552563,121.1228029,17.9744870];
- if(!intersectsBBox(pb,ab))throw new Error('Parcel is outside Abra coverage. v34 pilot includes Abra only; other provinces require data conversion.');
- status('safdzStatus','Downloading built-in Abra SAFDZ data…');
- const full=await fetchBuiltInAbra();
- status('safdzStatus','Selecting nearby Abra SAFDZ polygons and computing intersection…');
- const selected=full.features.filter(f=>{try{return intersectsBBox(turf.bbox(f),pb)}catch(_){return false}});
- safdzFC={type:'FeatureCollection',features:selected};populateFields(safdzFC);chosenClassField='SAFDZ';
+ const pb=turf.bbox(parcelFC),index=await getNationwideIndex();
+ const requested=document.getElementById('builtInProvince').value;
+ const provinces=index.provinces.filter(p=>requested==='AUTO'?intersectsBBox(pb,p.bbox):p.province===requested);
+ // Exclusion zones are intentionally conservative: no false "zero overlap" results.
+ const knownFailed=index.errors||[];
+ const failedNames=unavailableSafdzProvinces.filter(n=>knownFailed.some(e=>e.file.toUpperCase().includes(n.replaceAll(' ','_'))));
+ // Failed provinces have no bbox in the index; require authoritative coverage to prove a parcel is outside them.
+ // In AUTO mode, do not certify completeness from only successful provincial bboxes.
+ if(!provinces.length)throw new Error('No converted SAFDZ province matches parcel bounds. Missing coverage or invalid parcel CRS; analysis unavailable.');
+ const all=[];
+ for(const p of provinces){
+  const fc=await loadProvinceData(p);
+  const selected=fc.features.filter(f=>{try{return intersectsBBox(turf.bbox(f),pb)}catch(_){return false}});
+  all.push(...selected);
+ }
+ safdzFC={type:'FeatureCollection',features:all};
+ populateFields(safdzFC);chosenClassField='SAFDZ';
  const n=clipSafdz();
- status('safdzStatus',`Abra built-in SAFDZ loaded automatically. ${selected.length.toLocaleString()} candidate polygon(s); ${n.toLocaleString()} intersect the parcel. Area table updated.`);
+ const note=`Loaded ${provinces.map(p=>p.province).join(', ')}. ${all.length.toLocaleString()} candidate polygons; ${n.toLocaleString()} intersect parcel.`;
+ // No province-boundary coverage exists for failed provinces, so this cannot prove completeness.
+ status('safdzStatus',note+' PROVISIONAL: 4 provinces unavailable; verify parcel does not overlap their territory before official use.',true);
 }
+populateNationwideOptions();
 document.getElementById('loadParcel').onclick=async()=>{
  try{
   status('parcelStatus','Reading parcel…');const pf=document.getElementById('parcelFile').files[0];

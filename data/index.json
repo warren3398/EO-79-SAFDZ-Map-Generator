@@ -1,0 +1,972 @@
+{
+  "version": 3,
+  "crs": "EPSG:4326",
+  "provinces": [
+    {
+      "province": "ABRA",
+      "path": "abra/manifest.json",
+      "bbox": [
+        120.466054519172,
+        17.155256345880485,
+        121.1228028211403,
+        17.97448694483578
+      ],
+      "features": 14263,
+      "parts": 143
+    },
+    {
+      "province": "APAYAO",
+      "path": "apayao/manifest.json",
+      "bbox": [
+        120.8897764467561,
+        17.63555117496398,
+        121.48483274566193,
+        18.55686740691455
+      ],
+      "features": 5928,
+      "parts": 60
+    },
+    {
+      "province": "BENGUET",
+      "path": "benguet/manifest.json",
+      "bbox": [
+        120.4442939048598,
+        16.132883029359814,
+        120.9731501676377,
+        16.950812377370323
+      ],
+      "features": 22929,
+      "parts": 230
+    },
+    {
+      "province": "IFUGAO",
+      "path": "ifugao/manifest.json",
+      "bbox": [
+        120.89232178576579,
+        16.569449633652155,
+        121.57287403957125,
+        17.07948522572577
+      ],
+      "features": 19231,
+      "parts": 193
+    },
+    {
+      "province": "KALINGA",
+      "path": "kalinga/manifest.json",
+      "bbox": [
+        120.90715255216612,
+        17.170107333406364,
+        121.6693582695915,
+        17.711210505686395
+      ],
+      "features": 9087,
+      "parts": 91
+    },
+    {
+      "province": "ILOCOS NORTE",
+      "path": "ilocos-norte/manifest.json",
+      "bbox": [
+        120.42925500423206,
+        17.786033385983608,
+        120.97645365257489,
+        18.651224192489654
+      ],
+      "features": 26848,
+      "parts": 269
+    },
+    {
+      "province": "ILOCOS SUR",
+      "path": "ilocos-sur/manifest.json",
+      "bbox": [
+        120.34394893421215,
+        16.66976640775741,
+        120.81235517802256,
+        17.905160739523684
+      ],
+      "features": 35588,
+      "parts": 356
+    },
+    {
+      "province": "LA UNION",
+      "path": "la-union/manifest.json",
+      "bbox": [
+        120.27787545606449,
+        16.20130002878084,
+        120.56536457291595,
+        16.920904944274394
+      ],
+      "features": 31082,
+      "parts": 311
+    },
+    {
+      "province": "BATANES",
+      "path": "batanes/manifest.json",
+      "bbox": [
+        121.77738790953897,
+        20.260209448035354,
+        122.03571673557798,
+        21.121885500698344
+      ],
+      "features": 817,
+      "parts": 9
+    },
+    {
+      "province": "CAGAYAN",
+      "path": "cagayan/manifest.json",
+      "bbox": [
+        120.95867307312423,
+        17.499331242868983,
+        122.33762093614384,
+        19.573923999484176
+      ],
+      "features": 63924,
+      "parts": 640
+    },
+    {
+      "province": "ISABELA",
+      "path": "isabela/manifest.json",
+      "bbox": [
+        121.3261683372836,
+        16.393169835366503,
+        122.52852480354788,
+        17.585863041742524
+      ],
+      "features": 28059,
+      "parts": 281
+    },
+    {
+      "province": "NUEVA VIZCAYA",
+      "path": "nueva-vizcaya/manifest.json",
+      "bbox": [
+        120.76896588068684,
+        15.754418563526341,
+        121.52075772387289,
+        16.757178190589272
+      ],
+      "features": 45545,
+      "parts": 456
+    },
+    {
+      "province": "QUIRINO",
+      "path": "quirino/manifest.json",
+      "bbox": [
+        121.2774009630338,
+        15.926616184456503,
+        122.05880816287178,
+        16.64296249288042
+      ],
+      "features": 19287,
+      "parts": 193
+    },
+    {
+      "province": "AURORA",
+      "path": "aurora/manifest.json",
+      "bbox": [
+        121.28476346533975,
+        14.996370994583,
+        122.24299207553732,
+        16.509254805869908
+      ],
+      "features": 7871,
+      "parts": 79
+    },
+    {
+      "province": "BATAAN",
+      "path": "bataan/manifest.json",
+      "bbox": [
+        120.24818176834282,
+        14.407525729042993,
+        120.61827135607852,
+        14.922759518863868
+      ],
+      "features": 5001,
+      "parts": 51
+    },
+    {
+      "province": "BULACAN",
+      "path": "bulacan/manifest.json",
+      "bbox": [
+        120.68662268636281,
+        14.68848996328906,
+        121.34785650278916,
+        15.272196910289335
+      ],
+      "features": 7256,
+      "parts": 73
+    },
+    {
+      "province": "NUEVA ECIJA",
+      "path": "nueva-ecija/manifest.json",
+      "bbox": [
+        120.61506363533165,
+        15.175592374456398,
+        121.37852149574076,
+        16.138304449712095
+      ],
+      "features": 13326,
+      "parts": 134
+    },
+    {
+      "province": "PAMPANGA",
+      "path": "pampanga/manifest.json",
+      "bbox": [
+        120.35605734737138,
+        14.767216884554141,
+        120.9516585635388,
+        15.278676234338613
+      ],
+      "features": 5560,
+      "parts": 56
+    },
+    {
+      "province": "TARLAC",
+      "path": "tarlac/manifest.json",
+      "bbox": [
+        120.16519458178769,
+        15.16679166519305,
+        120.76449509312222,
+        15.862431161398574
+      ],
+      "features": 10710,
+      "parts": 108
+    },
+    {
+      "province": "ZAMBALES",
+      "path": "zambales/manifest.json",
+      "bbox": [
+        119.78583316096771,
+        14.737884624047014,
+        120.46302710875418,
+        15.874149926651116
+      ],
+      "features": 9063,
+      "parts": 91
+    },
+    {
+      "province": "BATANGAS",
+      "path": "batangas/manifest.json",
+      "bbox": [
+        120.48686475861898,
+        13.526201709545964,
+        121.47158059457904,
+        14.239822682119119
+      ],
+      "features": 22659,
+      "parts": 227
+    },
+    {
+      "province": "LAGUNA",
+      "path": "laguna/manifest.json",
+      "bbox": [
+        121.00529607560074,
+        13.963490909267353,
+        121.63462573577874,
+        14.59577138561634
+      ],
+      "features": 6884,
+      "parts": 69
+    },
+    {
+      "province": "QUEZON",
+      "path": "quezon/manifest.json",
+      "bbox": [
+        121.23696054112017,
+        13.161969934633625,
+        122.79251796612674,
+        15.216888722845253
+      ],
+      "features": 73188,
+      "parts": 732
+    },
+    {
+      "province": "RIZAL",
+      "path": "rizal/manifest.json",
+      "bbox": [
+        121.0958914168787,
+        14.27824361063131,
+        121.45105050614328,
+        14.834802569944623
+      ],
+      "features": 4021,
+      "parts": 41
+    },
+    {
+      "province": "MARINDUQUE",
+      "path": "marinduque/manifest.json",
+      "bbox": [
+        121.80482760233842,
+        13.189599508147161,
+        122.18815372445444,
+        13.570707385987674
+      ],
+      "features": 14337,
+      "parts": 144
+    },
+    {
+      "province": "OCCIDENTAL MINDORO",
+      "path": "occidental-mindoro/manifest.json",
+      "bbox": [
+        120.0180225552866,
+        12.153010079483714,
+        121.2612733284925,
+        13.899175750876063
+      ],
+      "features": 13430,
+      "parts": 135
+    },
+    {
+      "province": "ORIENTAL MINDORO",
+      "path": "oriental-mindoro/manifest.json",
+      "bbox": [
+        120.80067603473842,
+        12.20718142272345,
+        121.55835376562513,
+        13.53151062855929
+      ],
+      "features": 14415,
+      "parts": 145
+    },
+    {
+      "province": "PALAWAN",
+      "path": "palawan/manifest.json",
+      "bbox": [
+        114.27789225160879,
+        7.506560180149825,
+        121.29100278430225,
+        12.381897001567465
+      ],
+      "features": 62693,
+      "parts": 627
+    },
+    {
+      "province": "ROMBLON",
+      "path": "romblon/manifest.json",
+      "bbox": [
+        121.68084720443369,
+        12.031182645078477,
+        122.69878454602845,
+        12.963085917225305
+      ],
+      "features": 13397,
+      "parts": 134
+    },
+    {
+      "province": "ALBAY",
+      "path": "albay/manifest.json",
+      "bbox": [
+        123.28054814685241,
+        12.98157650371808,
+        124.22011111125272,
+        13.523255255068108
+      ],
+      "features": 21592,
+      "parts": 216
+    },
+    {
+      "province": "CAMARINES NORTE",
+      "path": "camarines-norte/manifest.json",
+      "bbox": [
+        122.29907431530646,
+        13.840163809045348,
+        123.11805794086395,
+        14.494304085836465
+      ],
+      "features": 13575,
+      "parts": 136
+    },
+    {
+      "province": "CAMARINES SUR",
+      "path": "camarines-sur/manifest.json",
+      "bbox": [
+        122.55091041796666,
+        13.258541093981323,
+        124.00233310174809,
+        14.128891166594917
+      ],
+      "features": 48457,
+      "parts": 485
+    },
+    {
+      "province": "CATANDUANES",
+      "path": "catanduanes/manifest.json",
+      "bbox": [
+        124.01261143910665,
+        13.516627839100009,
+        124.42487009775131,
+        14.100210771657837
+      ],
+      "features": 13744,
+      "parts": 138
+    },
+    {
+      "province": "MASBATE",
+      "path": "masbate/manifest.json",
+      "bbox": [
+        122.80009616252175,
+        11.720480406299876,
+        124.10347522946661,
+        13.180158540249938
+      ],
+      "features": 41112,
+      "parts": 412
+    },
+    {
+      "province": "SORSOGON",
+      "path": "sorsogon/manifest.json",
+      "bbox": [
+        123.4826656686955,
+        12.523464645271433,
+        124.19840855524208,
+        13.122257734308974
+      ],
+      "features": 19517,
+      "parts": 196
+    },
+    {
+      "province": "BASILAN",
+      "path": "basilan/manifest.json",
+      "bbox": [
+        121.42943667402652,
+        6.2789570140865845,
+        122.40731891743879,
+        6.9071405122364595
+      ],
+      "features": 21600,
+      "parts": 216
+    },
+    {
+      "province": "COTABATO CITY",
+      "path": "cotabato-city/manifest.json",
+      "bbox": [
+        124.15774119878573,
+        7.134971771002147,
+        124.31790495284918,
+        7.2726815310390505
+      ],
+      "features": 2277,
+      "parts": 23
+    },
+    {
+      "province": "LANAO DEL SUR",
+      "path": "lanao-del-sur/manifest.json",
+      "bbox": [
+        123.84965205140865,
+        7.400376787538069,
+        124.82850564334002,
+        8.163486536030916
+      ],
+      "features": 30442,
+      "parts": 305
+    },
+    {
+      "province": "MAGUINDANAO",
+      "path": "maguindanao/manifest.json",
+      "bbox": [
+        123.94347856293554,
+        6.600941208921276,
+        125.00774335338241,
+        7.63828923199591
+      ],
+      "features": 69793,
+      "parts": 698
+    },
+    {
+      "province": "SULU",
+      "path": "sulu/manifest.json",
+      "bbox": [
+        119.91932452922478,
+        5.4436783269296924,
+        121.94872251364701,
+        6.437405303841499
+      ],
+      "features": 21702,
+      "parts": 218
+    },
+    {
+      "province": "TAWI TAWI",
+      "path": "tawi-tawi/manifest.json",
+      "bbox": [
+        118.06423631023101,
+        4.58729451475985,
+        120.6964721309302,
+        7.1790729207461395
+      ],
+      "features": 6830,
+      "parts": 69
+    },
+    {
+      "province": "ISABELA CITY",
+      "path": "isabela-city/manifest.json",
+      "bbox": [
+        121.91777208088673,
+        6.572662401395301,
+        122.06459360344576,
+        6.755143205361147
+      ],
+      "features": 2659,
+      "parts": 27
+    },
+    {
+      "province": "ZAMBOANGA DEL NORTE",
+      "path": "zamboanga-del-norte/manifest.json",
+      "bbox": [
+        121.90969924322803,
+        7.139034737856732,
+        123.56652073600262,
+        8.859866028031014
+      ],
+      "features": 72181,
+      "parts": 722
+    },
+    {
+      "province": "ZAMBOANGA DEL SUR",
+      "path": "zamboanga-del-sur/manifest.json",
+      "bbox": [
+        121.89750458048718,
+        6.858104384883531,
+        123.66622197770391,
+        8.332930554834817
+      ],
+      "features": 66396,
+      "parts": 664
+    },
+    {
+      "province": "ZAMBOANGA SIBUGAY",
+      "path": "zamboanga-sibugay/manifest.json",
+      "bbox": [
+        122.22473736362426,
+        7.267823584438917,
+        123.10692372375735,
+        7.955091418525601
+      ],
+      "features": 19268,
+      "parts": 193
+    },
+    {
+      "province": "BUKIDNON",
+      "path": "bukidnon/manifest.json",
+      "bbox": [
+        124.48391439574154,
+        7.356437021642237,
+        125.44874109441228,
+        8.609524580625994
+      ],
+      "features": 81882,
+      "parts": 819
+    },
+    {
+      "province": "CAMIGUIN",
+      "path": "camiguin/manifest.json",
+      "bbox": [
+        124.63331692587778,
+        9.078753523712281,
+        124.82597894487397,
+        9.258024115837376
+      ],
+      "features": 2098,
+      "parts": 21
+    },
+    {
+      "province": "LANAO DEL NORTE",
+      "path": "lanao-del-norte/manifest.json",
+      "bbox": [
+        123.62154748148754,
+        7.693666069998926,
+        124.60588976787535,
+        8.380980566047848
+      ],
+      "features": 42968,
+      "parts": 430
+    },
+    {
+      "province": "MISAMIS OCCIDENTAL",
+      "path": "misamis-occidental/manifest.json",
+      "bbox": [
+        123.54388485960179,
+        8.011227853122833,
+        123.8688837491199,
+        8.670095037648736
+      ],
+      "features": 29790,
+      "parts": 298
+    },
+    {
+      "province": "MISAMIS ORIENTAL",
+      "path": "misamis-oriental/manifest.json",
+      "bbox": [
+        124.2466473419341,
+        8.160145694000354,
+        125.27032899874449,
+        9.093653108213106
+      ],
+      "features": 69490,
+      "parts": 695
+    },
+    {
+      "province": "COMPOSTELA VALLEY",
+      "path": "compostela-valley/manifest.json",
+      "bbox": [
+        125.65827980403759,
+        7.073460204996043,
+        126.30535907294531,
+        7.9999840291870745
+      ],
+      "features": 23774,
+      "parts": 238
+    },
+    {
+      "province": "DAVAO DEL NORTE",
+      "path": "davao-del-norte/manifest.json",
+      "bbox": [
+        125.30092396341887,
+        6.892521390010869,
+        125.93915249477419,
+        8.003247202767604
+      ],
+      "features": 7301,
+      "parts": 74
+    },
+    {
+      "province": "DAVAO DEL SUR",
+      "path": "davao-del-sur/manifest.json",
+      "bbox": [
+        125.04678999178522,
+        6.431130787393929,
+        125.67870494133214,
+        7.574536577258162
+      ],
+      "features": 60637,
+      "parts": 607
+    },
+    {
+      "province": "DAVAO OCCIDENTAL",
+      "path": "davao-occidental/manifest.json",
+      "bbox": [
+        125.31703188454827,
+        5.365505563484487,
+        125.71515293665267,
+        6.633033431635402
+      ],
+      "features": 8177,
+      "parts": 82
+    },
+    {
+      "province": "DAVAO ORIENTAL",
+      "path": "davao-oriental/manifest.json",
+      "bbox": [
+        125.94411755212337,
+        6.269284729934726,
+        126.60496555277376,
+        8.002065964132578
+      ],
+      "features": 28249,
+      "parts": 283
+    },
+    {
+      "province": "SARANGANI",
+      "path": "sarangani/manifest.json",
+      "bbox": [
+        124.36454517726234,
+        5.554880679255202,
+        125.59104295415727,
+        6.541238514327163
+      ],
+      "features": 50619,
+      "parts": 507
+    },
+    {
+      "province": "SOUTH COTABATO",
+      "path": "south-cotabato/manifest.json",
+      "bbox": [
+        124.38905302204697,
+        5.9849554316572595,
+        125.20283014502064,
+        6.676920385924466
+      ],
+      "features": 22182,
+      "parts": 222
+    },
+    {
+      "province": "SULTAN KUDARAT",
+      "path": "sultan-kudarat/manifest.json",
+      "bbox": [
+        124.01621684999303,
+        6.114169247657986,
+        125.20768498540866,
+        6.884765756241525
+      ],
+      "features": 51349,
+      "parts": 514
+    },
+    {
+      "province": "AGUSAN DEL NORTE",
+      "path": "agusan-del-norte/manifest.json",
+      "bbox": [
+        125.19524786609482,
+        8.670195705088323,
+        125.78380197708518,
+        9.497553956983195
+      ],
+      "features": 24067,
+      "parts": 241
+    },
+    {
+      "province": "AGUSAN DEL SUR",
+      "path": "agusan-del-sur/manifest.json",
+      "bbox": [
+        125.23324744717992,
+        7.914355408729064,
+        126.30394450326285,
+        9.211467681536588
+      ],
+      "features": 37765,
+      "parts": 378
+    },
+    {
+      "province": "DINAGAT ISLANDS",
+      "path": "dinagat-islands/manifest.json",
+      "bbox": [
+        125.460460738246,
+        9.851670033408984,
+        125.7072442820866,
+        10.47159471664988
+      ],
+      "features": 29374,
+      "parts": 294
+    },
+    {
+      "province": "SURIGAO DEL NORTE",
+      "path": "surigao-del-norte/manifest.json",
+      "bbox": [
+        125.39103195106128,
+        9.306689015658051,
+        126.18243188112731,
+        10.062595999626213
+      ],
+      "features": 85855,
+      "parts": 859
+    },
+    {
+      "province": "SURIGAO DEL SUR",
+      "path": "surigao-del-sur/manifest.json",
+      "bbox": [
+        125.6861936863708,
+        7.895270702818405,
+        126.45934824701344,
+        9.49570305964727
+      ],
+      "features": 42010,
+      "parts": 421
+    },
+    {
+      "province": "AKLAN",
+      "path": "aklan/manifest.json",
+      "bbox": [
+        121.8435959237118,
+        11.153811719692516,
+        122.57760651634878,
+        11.999383716678288
+      ],
+      "features": 30813,
+      "parts": 309
+    },
+    {
+      "province": "ANTIQUE",
+      "path": "antique/manifest.json",
+      "bbox": [
+        121.28266863404437,
+        10.406292344962678,
+        122.32460080646187,
+        12.208995605087681
+      ],
+      "features": 31452,
+      "parts": 315
+    },
+    {
+      "province": "CAPIZ",
+      "path": "capiz/manifest.json",
+      "bbox": [
+        122.19034597919136,
+        11.155972941582458,
+        123.09835888761683,
+        11.6460151723341
+      ],
+      "features": 42546,
+      "parts": 426
+    },
+    {
+      "province": "GUIMARAS",
+      "path": "guimaras/manifest.json",
+      "bbox": [
+        122.47469459187461,
+        10.386120023017194,
+        122.7438199732029,
+        10.754278492580523
+      ],
+      "features": 19977,
+      "parts": 200
+    },
+    {
+      "province": "ILOILO",
+      "path": "iloilo/manifest.json",
+      "bbox": [
+        122.00979520670857,
+        10.466259648211219,
+        123.37268858032286,
+        11.638775268922657
+      ],
+      "features": 69956,
+      "parts": 700
+    },
+    {
+      "province": "NEGROS OCCIDENTAL",
+      "path": "negros-occidental/manifest.json",
+      "bbox": [
+        122.37327396197394,
+        9.444823229367156,
+        123.57214694755478,
+        11.044571350145391
+      ],
+      "features": 112066,
+      "parts": 1121
+    },
+    {
+      "province": "BOHOL",
+      "path": "bohol/manifest.json",
+      "bbox": [
+        123.68125407838669,
+        9.485585865634011,
+        124.64535359074355,
+        10.252320170863877
+      ],
+      "features": 121822,
+      "parts": 1219
+    },
+    {
+      "province": "CEBU",
+      "path": "cebu/manifest.json",
+      "bbox": [
+        123.29636777105762,
+        9.412867509053338,
+        124.57097229504801,
+        11.524288716965682
+      ],
+      "features": 104415,
+      "parts": 1045
+    },
+    {
+      "province": "NEGROS ORIENTAL",
+      "path": "negros-oriental/manifest.json",
+      "bbox": [
+        122.58910462110711,
+        9.038367739231001,
+        123.33523387763086,
+        10.439720560217811
+      ],
+      "features": 141272,
+      "parts": 1413
+    },
+    {
+      "province": "SIQUIJOR",
+      "path": "siquijor/manifest.json",
+      "bbox": [
+        123.45194259327158,
+        9.094668122809688,
+        123.7019789284694,
+        9.301050582435982
+      ],
+      "features": 14337,
+      "parts": 144
+    },
+    {
+      "province": "BILIRAN",
+      "path": "biliran/manifest.json",
+      "bbox": [
+        124.25550143543641,
+        11.455574818559791,
+        124.6196253719321,
+        11.81719365578892
+      ],
+      "features": 5519,
+      "parts": 56
+    },
+    {
+      "province": "EASTERN SAMAR",
+      "path": "eastern-samar/manifest.json",
+      "bbox": [
+        125.11193845501576,
+        10.687790902763009,
+        125.96918132188124,
+        12.397425264724513
+      ],
+      "features": 24203,
+      "parts": 243
+    },
+    {
+      "province": "LEYTE",
+      "path": "leyte/manifest.json",
+      "bbox": [
+        124.28567453958013,
+        10.183849579915142,
+        125.1774313403423,
+        11.563612333322244
+      ],
+      "features": 118226,
+      "parts": 1183
+    },
+    {
+      "province": "NORTHERN SAMAR",
+      "path": "northern-samar/manifest.json",
+      "bbox": [
+        124.00261821368274,
+        12.13813026663809,
+        125.34226139254908,
+        12.69774620744102
+      ],
+      "features": 21693,
+      "parts": 217
+    },
+    {
+      "province": "SOUTHERN LEYTE",
+      "path": "southern-leyte/manifest.json",
+      "bbox": [
+        124.75331369957104,
+        9.895200248016264,
+        125.29907068525428,
+        10.600862024768341
+      ],
+      "features": 20925,
+      "parts": 210
+    },
+    {
+      "province": "WESTERN SAMAR",
+      "path": "western-samar/manifest.json",
+      "bbox": [
+        124.14516522011962,
+        11.086082395288317,
+        125.2904169134818,
+        12.31796321742298
+      ],
+      "features": 43220,
+      "parts": 433
+    }
+  ],
+  "errors": [
+    {
+      "file": "E:\\MAPS\\NPAAAD AND SAFDZ\\LUZON\\LUZON\\CORDILLERA ADMINISTRATIVE REGION (CAR)\\MOUNTAIN PROVINCE\\MOUNTAIN_PROVINCE_SAFDZ\\MOUNTAIN_PROVINCE_SAFDZ.shp",
+      "error": "SAFDZ classification field not found; available: ['QAFD^', 'GRIG_FI\\x05', 'Shape_Leng', 'Shixe_Area', 'AGEJCY', 'APPROVED_B', 'A\\\\TESTED_B', 'PREPAREDWB', 'YEAR']"
+    },
+    {
+      "file": "E:\\MAPS\\NPAAAD AND SAFDZ\\LUZON\\LUZON\\REGION I (ILOCOS REGION)\\PANGASINAN\\PANGASINAN_SAFDZ\\PANGASINAN_SAFDZ.shp",
+      "error": ".shx file is unreadable, or corrupt."
+    },
+    {
+      "file": "E:\\MAPS\\NPAAAD AND SAFDZ\\LUZON\\LUZON\\REGION IV-A (CALABARZON)\\CAVITE\\CAVITE_SAFDZ\\CAVITE_SAFDZ.shp",
+      "error": "IllegalArgumentException: Points of LinearRing do not form a closed linestring"
+    },
+    {
+      "file": "E:\\MAPS\\NPAAAD AND SAFDZ\\MINDANAO\\MINDANAO\\REGION XII\\NORTH COTABATO\\NORTH_COTABATO_SAFDZ\\NORTH_COTABATO_SAFDZ.shp",
+      "error": "IllegalArgumentException: Points of LinearRing do not form a closed linestring"
+    }
+  ]
+}
